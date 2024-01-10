@@ -1,4 +1,4 @@
-pipeline {
+opipeline {
     environment { // Declaration des variables d'environnements
         DOCKER_ID = "errlog"
         DOCKER_IMAGE_CAST_SERVICE = "jenkins-cast-service"
@@ -98,7 +98,7 @@ pipeline {
                 stage('Deploy dev') {
                     steps {
                         sh '''
-                            
+                            echo  "The build id is ${env.BRANCH_NAME}"
                         '''
                     }
                 }
