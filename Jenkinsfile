@@ -96,25 +96,16 @@ pipeline {
             }
             parallel {
                 stage('Deploy dev') {
-                    when {
-                        branch 'develop'
-                    }
                     steps {
                          echo "BRANCH NAME ${env.BRANCH_NAME} "
                     }
                 }
                 stage('Deploy qa') {
-                    when {
-                        branch 'qa'
-                    }
                     steps {
                          echo "BRANCH NAME ${env.BRANCH_NAME} "
                     }
                 }
                 stage('Deploy staging') {
-                    when {
-                        branch 'staging'
-                    }
                     steps {
                          echo "BRANCH NAME ${env.BRANCH_NAME} "
                     }
