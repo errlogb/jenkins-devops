@@ -41,8 +41,8 @@ pipeline {
                             docker exec -d movie_service uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
                             sleep 6
                             curl http://localhost:8001/api/v1/movies/docs
-                            docker container rm movie_service
-                            docker container rm movie_db
+                            docker container rm movie_service -f
+                            docker container rm movie_db -f
                             docker network rm movie_network -f
                         '''
                     }
@@ -59,8 +59,8 @@ pipeline {
                             docker exec -d cast_service uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
                             sleep 6
                             curl http://localhost:8002/api/v1/casts/docs
-                            docker container rm cast_service
-                            docker container rm cast_db
+                            docker container rm cast_service -f
+                            docker container rm cast_db -f
                             docker network rm cast_network -f
                         '''
                     }
