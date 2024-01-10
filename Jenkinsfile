@@ -97,7 +97,9 @@ opipeline {
             parallel {
                 stage('Deploy dev') {
                     steps {
-                        echo  "ici"
+                        sh '''
+                            
+                        '''
                     }
                 }
                 stage('Deploy prod') {
