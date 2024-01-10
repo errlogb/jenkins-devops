@@ -67,5 +67,30 @@ pipeline {
                 }
             }
         }
+
+        stage('Docker Push') {
+            environment
+            {
+                DOCKER_PASS = credentials("DOCKER_HUB_PASS")
+            }
+            stages {
+                stage('Push movie service') {
+                    steps {
+                        sh '''
+                            docker login -u $DOCKER_ID -p $DOCKER_PASS
+                            docker push $DOCKER_ID/$DOCKER_IMAGE_MOVIE_SERVICE:$DOCKER_TAG
+                        '''
+                    }
+                }
+                stage('Push cast service') {
+                    steps {
+                        sh '''
+                            docker login -u $DOCKER_ID -p $DOCKER_PASS
+                            docker push $DOCKER_ID/$DOCKER_IMAGE_CAST_SERVICE:$DOCKER_TAG
+                        '''
+                    }
+                }
+            }
+        }
     }
 }
