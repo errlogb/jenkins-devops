@@ -97,9 +97,7 @@ opipeline {
             parallel {
                 stage('Deploy dev') {
                     steps {
-                        sh '''
-                            echo  "The build id is ${env.BRANCH_NAME}"
-                        '''
+                        echo  "Branch name ${env.BRANCH_NAME}"
                     }
                 }
                 stage('Deploy prod') {
