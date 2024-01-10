@@ -27,7 +27,7 @@ pipeline {
             }
         }
 
-        stage('Docker Run'){
+        stage('Docker Test Run'){
             parallel {
                 stage('Run movie service') {
                     steps {
@@ -66,7 +66,7 @@ pipeline {
             }
         }
 
-        stage('Docker Push') {
+        stage('Docker Images Push') {
             environment {
                 DOCKER_PASS = credentials("DOCKER_HUB_PASS")
             }
@@ -89,5 +89,35 @@ pipeline {
                 }
             }    
         }
+
+        stage('Deploy environments') {
+            environment {
+                KUBECONFIG = credentials("config")
+            }
+            parallel {
+                stage('Deploy dev) {
+                    steps {
+                        sh '''
+                            
+                        '''
+                    }
+                }
+                stage('Deploy prod') {
+                    when {
+                        branch 'main'
+                    }
+                    timeout(time: 15, unit: "MINUTES") {
+                        input message: 'Do you want to deploy in production ?', ok: 'Yes'
+                    }
+                    steps {
+                        sh '''
+                            
+                        '''
+                    }
+                }
+            }    
+        }
+
+        
     }
 }
