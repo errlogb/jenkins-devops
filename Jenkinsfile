@@ -97,7 +97,7 @@ opipeline {
             parallel {
                 stage('Deploy dev') {
                     steps {
-                        echo  "Branch name ${env.BRANCH_NAME}"
+                        echo  "ici"
                     }
                 }
                 stage('Deploy prod') {
