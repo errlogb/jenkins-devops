@@ -95,7 +95,7 @@ pipeline {
                 KUBECONFIG = credentials("config")
             }
             parallel {
-                stage('Deploy dev) {
+                stage('Deploy dev') {
                     steps {
                         sh '''
                             
