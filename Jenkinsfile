@@ -1,4 +1,4 @@
-opipeline {
+pipeline {
     environment { // Declaration des variables d'environnements
         DOCKER_ID = "errlog"
         DOCKER_IMAGE_CAST_SERVICE = "jenkins-cast-service"
@@ -97,9 +97,7 @@ opipeline {
             parallel {
                 stage('Deploy dev') {
                     steps {
-                        sh '''
-                            
-                        '''
+                         echo "BRANCH NAME ${BRANCH_NAME} "
                     }
                 }
                 stage('Deploy prod') {
