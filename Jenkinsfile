@@ -109,9 +109,7 @@ pipeline {
                             input message: 'Do you want to deploy in production ?', ok: 'Yes'
                         }                    
                         script {
-                            sh '''
-                            
-                            '''
+                            echo "BRANCH NAME ${env.BRANCH_NAME} "
                         }
                     }
                 }
