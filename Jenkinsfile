@@ -21,7 +21,7 @@ pipeline {
             }
         }
 
-        stage('Docker Run'){
+        stage('Docker Run built images'){
             steps {
                 script {
                     sh '''
