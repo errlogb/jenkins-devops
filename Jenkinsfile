@@ -106,13 +106,15 @@ pipeline {
                     when {
                         branch 'main'
                     }
-                    timeout(time: 15, unit: "MINUTES") {
-                        input message: 'Do you want to deploy in production ?', ok: 'Yes'
-                    }
                     steps {
-                        sh '''
+                        timeout(time: 15, unit: "MINUTES") {
+                            input message: 'Do you want to deploy in production ?', ok: 'Yes'
+                        }                    
+                        script {
+                            sh '''
                             
-                        '''
+                            '''
+                        }
                     }
                 }
             }    
