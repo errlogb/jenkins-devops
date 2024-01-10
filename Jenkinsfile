@@ -97,7 +97,7 @@ pipeline {
             parallel {
                 stage('Deploy dev') {
                     steps {
-                         echo "BRANCH NAME ${BRANCH_NAME} "
+                         echo "BRANCH NAME ${env.BRANCH_NAME} "
                     }
                 }
                 stage('Deploy prod') {
