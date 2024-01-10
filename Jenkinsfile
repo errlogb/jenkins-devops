@@ -26,7 +26,7 @@ pipeline {
                 script {
                     sh '''
                          docker run -d -p 8001:8000 --name cast-service "$DOCKER_ID/$DOCKER_IMAGE_CAST_SERVICE:$DOCKER_TAG" sh -c "uvicorn main:app --reload --host 0.0.0.0 --port 8000"
-                         docker run -d -p 8001:8000 --name movie-service "$DOCKER_ID/$DOCKER_IMAGE_MOVIE_SERVICE:$DOCKER_TAG" sh -c "uvicorn main:app --reload --host 0.0.0.0 --port 8000"
+                         docker run -d -p 8002:8000 --name movie-service "$DOCKER_ID/$DOCKER_IMAGE_MOVIE_SERVICE:$DOCKER_TAG" sh -c "uvicorn main:app --reload --host 0.0.0.0 --port 8000"
                     '''
                 }
             }
