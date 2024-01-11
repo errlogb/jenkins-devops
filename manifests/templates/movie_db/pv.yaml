@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Release.Name }}-movie-db-pv
+  namespace: {{.Values.namespace }}
+spec:
+  storageClassName: default
+  capacity:
+    storage: {{ .Values.movie_db.pv.storage }}
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: {{ .Values.movie_db.pv.hostPath }}

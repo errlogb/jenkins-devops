@@ -1,0 +1,74 @@
+# Définition des valeurs à utiliser par nginx
+nginx:
+  deployment:
+    containerPort: 8080
+    repository: "nginx:latest"
+  service:
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+    type: LoadBalancer
+
+# Définition des valeurs à utiliser par cast-service
+cast_service:
+  deployment:
+    containerPort: 8000
+    repository: ""
+  service:
+    protocol: TCP
+    port: 8002
+    targetPort: 8000
+    type: ClusterIP
+
+# Définition des valeurs à utiliser par movie-service
+movie_service:
+  deployment:
+    containerPort: 8000
+    repository: ""
+  service:
+    protocol: TCP
+    port: 8001
+    targetPort: 8000
+    type: ClusterIP
+
+# Définition des valeurs à utiliser par cast-db
+movie_db:
+  statefulset:
+    repository: postgres:12.1-alpine
+    containerPort: 5432
+    volume:
+      mountPath: /var/lib/postgresql/data
+      storage: 1Gi
+  service:
+    protocol: TCP
+    port: 5432
+    targetPort: 5432
+    type: ClusterIP
+  secret:
+    username: bW92aWVfZGJfdXNlcm5hbWU= #movie_db_username
+    password: bW92aWVfZGJfcGFzc3dvcmQ= #movie_db_password
+    database: bW92aWVfZGJfZGV2 #movie_db_dev
+  pv:
+    storage: 1Gi
+    hostPath: "/mnt/data/movie_db"
+
+# Définition des valeurs à utiliser par movie-db
+cast_db:
+  statefulset:
+    repository: postgres:12.1-alpine
+    containerPort: 5432
+    volume:
+      mountPath: /var/lib/postgresql/data
+      storage: 1Gi
+  service:
+    protocol: TCP
+    port: 5432
+    targetPort: 5432
+    type: ClusterIP
+  secret:
+    username: Y2FzdF9kYl91c2VybmFtZQ== #cast_db_username
+    password: Y2FzdF9kYl9wYXNzd29yZA== #cast_db_password
+    database: Y2FzdF9kYl9kZXY= #cast_db_dev
+  pv:
+    storage: 1Gi
+    hostPath: "/mnt/data/movie_db"

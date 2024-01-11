@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Release.Name }}-cast-db-pv
+  namespace: {{.Values.namespace }}
+spec:
+  storageClassName: default
+  capacity:
+    storage: {{ .Values.cast_db.pv.storage }}
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: {{ .Values.cast_db.pv.hostPath }}
