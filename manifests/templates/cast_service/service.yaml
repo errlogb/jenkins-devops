@@ -9,5 +9,5 @@ spec:
   ports:
       - protocol: {{ .Values.cast-service.service.protocol }}
         port: {{ .Values.cast-service.service.port }}
-        targetPort: {{ .Values.cast-service.service.targetPort }}
-  type: {{ .Values.cast-service.service.type }}
+        targetPort: {{ .Values.cast_service.service.targetPort }}
+  type: {{ .Values.cast_service.service.type }}
