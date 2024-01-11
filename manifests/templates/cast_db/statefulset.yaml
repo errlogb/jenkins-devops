@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: cast_db_postgres
+  name: cast-db-postgres
   namespace: {{.Values.namespace }}
 spec:
   replicas: 1
