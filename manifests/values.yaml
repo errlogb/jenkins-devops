@@ -71,4 +71,4 @@ cast_db:
     database: Y2FzdF9kYl9kZXY= #cast_db_dev
   pv:
     storage: 1Gi
-    hostPath: "/mnt/data/movie_db"
+    hostPath: "/mnt/data/cast_db"
