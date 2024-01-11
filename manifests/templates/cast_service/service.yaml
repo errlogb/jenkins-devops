@@ -7,7 +7,7 @@ spec:
   selector:
     app: {{ .Release.Name }}-cast-service
   ports:
-      - protocol: {{ .Values.cast-service.service.protocol }}
-        port: {{ .Values.cast-service.service.port }}
+      - protocol: {{ .Values.cast_service.service.protocol }}
+        port: {{ .Values.cast_service.service.port }}
         targetPort: {{ .Values.cast_service.service.targetPort }}
   type: {{ .Values.cast_service.service.type }}
