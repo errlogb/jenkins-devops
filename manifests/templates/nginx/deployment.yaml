@@ -13,10 +13,10 @@ spec:
         app: {{ .Release.Name }}-nginx
     spec:
       containers:
-        - name: nginx
+        - name:  {{ .Release.Name }}-nginx
           image: {{ .Values.nginx.deployment.repository }}
-            ports:
-              - containerPort: {{ .Values.nginx.deployment.containerPort }}
+          ports:
+            - containerPort: {{ .Values.nginx.deployment.containerPort }}
           volumeMounts:
             - name: {{ .Release.Name }}-nginx-storage
               mountPath: /etc/nginx/conf.d
