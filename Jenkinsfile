@@ -97,7 +97,15 @@ pipeline {
             parallel {
                 stage('Deploy dev') {
                     steps {
-                         echo "BRANCH NAME ${env.BRANCH_NAME} "
+                        sh '''
+                            rm -Rf .kube
+                            mkdir .kube
+                            ls
+                            cat $KUBECONFIG > .kube/config
+                            cp manifests/values.yaml values.yml
+                            cat values.yml
+                            helm upgrade --install app manifests --values=values.yml --namespace dev --set cast_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_CAST_SERVICE:$DOCKER_TAG" --set movie_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_MOVIE_SERVICE:$DOCKER_TAG" --set nginx.service.port="8080"
+                        '''
                     }
                 }
                 stage('Deploy qa') {
