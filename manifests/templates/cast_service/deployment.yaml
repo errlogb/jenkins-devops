@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cast_service
+  name: cast-service
 spec:
   replicas: 1
   selector:
@@ -21,4 +21,4 @@ spec:
               - containerPort: {{ .Values.cast_service.deployment.containerPort }}
             env:
               - name: DATABASE_URI
-                value: postgresql://cast_db_username:cast_db_password@cast_db/cast_db_dev
+                value: postgresql://cast_db_username:cast_db_password@cast-db/cast_db_dev
