@@ -5,7 +5,7 @@ metadata:
 data:
   nginx.conf: |
     server {
-      listen 8080;
+      listen 8081;
     
       location /api/v1/movies {
         proxy_pass http://movie-service:8000/api/v1/movies;
