@@ -22,6 +22,6 @@ spec:
               mountPath: /etc/nginx/conf.d
               subPath: nginx.conf
       volumes:
-        - name: nginx-config
+        - name: {{ .Release.Name }}-nginx-storage
           configMap:
             name: {{ .Release.Name }}-nginx-config
