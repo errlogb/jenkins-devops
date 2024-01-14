@@ -1,3 +1,5 @@
+namespace: "dev"
+
 # Définition des valeurs à utiliser par nginx
 nginx:
   deployment:
