@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: movie-db
+spec:
+  selector:
+    app: {{ .Release.Name }}-movie-db
+  ports:
+    - protocol: {{ .Values.movie_db.service.protocol }}
+      port: {{ .Values.movie_db.service.port }}
+      targetPort: {{ .Values.movie_db.service.targetPort }}

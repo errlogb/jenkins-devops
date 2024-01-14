@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: movie-db-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-movie-db
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-movie-db
+    spec:
+      containers:
+        - name: {{ .Release.Name }}-movie-db
+          image: {{ .Values.movie_db.statefulset.repository }}
+          ports:
+            - containerPort: {{ .Values.movie_db.statefulset.containerPort }}
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-movie-db-secret
+                  key: movie-db-username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-movie-db-secret
+                  key: movie-db-password
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-movie-db-secret
+                  key: movie-db-database
+          volumeMounts:
+            - name: {{ .Release.Name }}-movie-db-storage
+              mountPath: {{ .Values.movie_db.statefulset.volume.mountPath }}
+  volumeClaimTemplates:
+    - metadata:
+        name: {{ .Release.Name }}-movie-db-storage
+      spec:
+        accessModes:
+          - ReadWriteMany
+        storageClassName: default
+        resources:
+          requests:
+            storage: {{ .Values.movie_db.statefulset.volume.storage }}

@@ -3,7 +3,7 @@ pipeline {
         DOCKER_ID = "errlog"
         DOCKER_IMAGE_CAST_SERVICE = "jenkins-cast-service"
         DOCKER_IMAGE_MOVIE_SERVICE = "jenkins-movie-service"
-        DOCKER_TAG = "v.${BUILD_ID}.0"
+        DOCKER_TAG = "${env.BRANCH_NAME == "main" ? "latest" :  "v.${BUILD_ID}.0"}"
     }
 
     agent any
@@ -97,7 +97,41 @@ pipeline {
             parallel {
                 stage('Deploy dev') {
                     steps {
-                         echo "BRANCH NAME ${env.BRANCH_NAME} "
+                        sh '''
+                            rm -Rf .kube
+                            mkdir .kube
+                            ls
+                            cat $KUBECONFIG > .kube/config
+                            cp manifests/values.yaml values.yml
+                            helm status app -n dev && helm uninstall app -n dev || true
+                            helm upgrade --install app manifests --values=values.yml --namespace dev --set cast_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_CAST_SERVICE:$DOCKER_TAG" --set movie_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_MOVIE_SERVICE:$DOCKER_TAG" --set nginx.service.port="8081" --set namespace="dev"
+                        '''
+                    }
+                }
+                stage('Deploy qa') {
+                    steps {
+                        sh '''
+                            rm -Rf .kube
+                            mkdir .kube
+                            ls
+                            cat $KUBECONFIG > .kube/config
+                            cp manifests/values.yaml values.yml
+                            helm status app -n qa && helm uninstall app -n qa || true
+                            helm upgrade --install app manifests --values=values.yml --namespace qa --set cast_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_CAST_SERVICE:$DOCKER_TAG" --set movie_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_MOVIE_SERVICE:$DOCKER_TAG" --set nginx.service.port="8082" --set namespace="qa"
+                        '''
+                    }
+                }
+                stage('Deploy staging') {
+                    steps {
+                        sh '''
+                            rm -Rf .kube
+                            mkdir .kube
+                            ls
+                            cat $KUBECONFIG > .kube/config
+                            cp manifests/values.yaml values.yml
+                            helm status app -n staging && helm uninstall app -n staging || true
+                            helm upgrade --install staging manifests --values=values.yml --namespace staging --set cast_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_CAST_SERVICE:$DOCKER_TAG" --set movie_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_MOVIE_SERVICE:$DOCKER_TAG" --set nginx.service.port="8083" --set namespace="staging"
+                        '''
                     }
                 }
                 stage('Deploy prod') {
@@ -109,7 +143,15 @@ pipeline {
                             input message: 'Do you want to deploy in production ?', ok: 'Yes'
                         }                    
                         script {
-                            echo "BRANCH NAME ${env.BRANCH_NAME} "
+                        sh '''
+                            rm -Rf .kube
+                            mkdir .kube
+                            ls
+                            cat $KUBECONFIG > .kube/config
+                            cp manifests/values.yaml values.yml
+                            helm status app -n prod && helm uninstall app -n prod || true
+                            helm upgrade --install app manifests --values=values.yml --namespace prod --set cast_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_CAST_SERVICE:latest" --set movie_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_MOVIE_SERVICE:latest" --set nginx.service.port="8084" --set namespace="prod"
+                        '''
                         }
                     }
                 }

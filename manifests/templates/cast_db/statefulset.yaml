@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: cast-db-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-cast-db
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-cast-db
+    spec:
+      containers:
+        - name: {{ .Release.Name }}-cast-db
+          image: {{ .Values.cast_db.statefulset.repository }}
+          ports:
+            - containerPort: {{ .Values.cast_db.statefulset.containerPort }}
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-cast-db-secret
+                  key: cast-db-username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-cast-db-secret
+                  key: cast-db-password
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-cast-db-secret
+                  key: cast-db-database
+          volumeMounts:
+            - name: {{ .Release.Name }}-cast-db-storage
+              mountPath: {{ .Values.cast_db.statefulset.volume.mountPath }}
+  volumeClaimTemplates:
+    - metadata:
+        name: {{ .Release.Name }}-cast-db-storage
+      spec:
+        accessModes:
+          - ReadWriteMany
+        storageClassName: default
+        resources:
+          requests:
+            storage: {{ .Values.cast_db.statefulset.volume.storage }}
