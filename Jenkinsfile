@@ -103,7 +103,7 @@ pipeline {
                             ls
                             cat $KUBECONFIG > .kube/config
                             cp manifests/values.yaml values.yml
-                            cat values.yml
+                            sudo helm uninstall app -n dev
                             helm upgrade --install app manifests --values=values.yml --namespace dev --set cast_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_CAST_SERVICE:$DOCKER_TAG" --set movie_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_MOVIE_SERVICE:$DOCKER_TAG" --set nginx.service.port="8081"
                         '''
                     }
@@ -116,7 +116,7 @@ pipeline {
                             ls
                             cat $KUBECONFIG > .kube/config
                             cp manifests/values.yaml values.yml
-                            cat values.yml
+                            sudo helm uninstall app -n qa
                             helm upgrade --install app manifests --values=values.yml --namespace qa --set cast_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_CAST_SERVICE:$DOCKER_TAG" --set movie_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_MOVIE_SERVICE:$DOCKER_TAG" --set nginx.service.port="8082"
                         '''
                     }
@@ -129,8 +129,8 @@ pipeline {
                             ls
                             cat $KUBECONFIG > .kube/config
                             cp manifests/values.yaml values.yml
-                            cat values.yml
-                            helm upgrade --install staging manifests --values=values.yml --namespace dev --set cast_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_CAST_SERVICE:$DOCKER_TAG" --set movie_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_MOVIE_SERVICE:$DOCKER_TAG" --set nginx.service.port="8083"
+                            sudo helm uninstall app -n staging
+                            helm upgrade --install staging manifests --values=values.yml --namespace staging --set cast_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_CAST_SERVICE:$DOCKER_TAG" --set movie_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_MOVIE_SERVICE:$DOCKER_TAG" --set nginx.service.port="8083"
                         '''
                     }
                 }
@@ -149,7 +149,7 @@ pipeline {
                             ls
                             cat $KUBECONFIG > .kube/config
                             cp manifests/values.yaml values.yml
-                            cat values.yml
+                            sudo helm uninstall app -n prod
                             helm upgrade --install app manifests --values=values.yml --namespace prod --set cast_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_CAST_SERVICE:latest" --set movie_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_MOVIE_SERVICE:latest" --set nginx.service.port="8084"
                         '''
                         }

@@ -1,8 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ .Release.Name }}-movie-db-pv
-  namespace: {{.Values.namespace }}
+  name: {{ .Release.Name }}-{{.Values.namespace }}-movie-db-pv
 spec:
   storageClassName: default
   capacity:
