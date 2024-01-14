@@ -3,7 +3,7 @@ pipeline {
         DOCKER_ID = "errlog"
         DOCKER_IMAGE_CAST_SERVICE = "jenkins-cast-service"
         DOCKER_IMAGE_MOVIE_SERVICE = "jenkins-movie-service"
-        DOCKER_TAG = "v.${BUILD_ID}.0"
+        DOCKER_TAG = env.BRANCH_NAME == 'main' ? 'latest' : "v.${BUILD_ID}.0"
     }
 
     agent any
@@ -110,12 +110,28 @@ pipeline {
                 }
                 stage('Deploy qa') {
                     steps {
-                         echo "BRANCH NAME ${env.BRANCH_NAME} "
+                        sh '''
+                            rm -Rf .kube
+                            mkdir .kube
+                            ls
+                            cat $KUBECONFIG > .kube/config
+                            cp manifests/values.yaml values.yml
+                            cat values.yml
+                            helm upgrade --install app manifests --values=values.yml --namespace qa --set cast_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_CAST_SERVICE:$DOCKER_TAG" --set movie_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_MOVIE_SERVICE:$DOCKER_TAG" --set nginx.service.port="8082"
+                        '''
                     }
                 }
                 stage('Deploy staging') {
                     steps {
-                         echo "BRANCH NAME ${env.BRANCH_NAME} "
+                        sh '''
+                            rm -Rf .kube
+                            mkdir .kube
+                            ls
+                            cat $KUBECONFIG > .kube/config
+                            cp manifests/values.yaml values.yml
+                            cat values.yml
+                            helm upgrade --install staging manifests --values=values.yml --namespace dev --set cast_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_CAST_SERVICE:$DOCKER_TAG" --set movie_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_MOVIE_SERVICE:$DOCKER_TAG" --set nginx.service.port="8083"
+                        '''
                     }
                 }
                 stage('Deploy prod') {
@@ -127,7 +143,15 @@ pipeline {
                             input message: 'Do you want to deploy in production ?', ok: 'Yes'
                         }                    
                         script {
-                            echo "BRANCH NAME ${env.BRANCH_NAME} "
+                        sh '''
+                            rm -Rf .kube
+                            mkdir .kube
+                            ls
+                            cat $KUBECONFIG > .kube/config
+                            cp manifests/values.yaml values.yml
+                            cat values.yml
+                            helm upgrade --install app manifests --values=values.yml --namespace prod --set cast_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_CAST_SERVICE:latest" --set movie_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_MOVIE_SERVICE:latest" --set nginx.service.port="8084"
+                        '''
                         }
                     }
                 }
