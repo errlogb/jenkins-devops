@@ -5,7 +5,7 @@ metadata:
   namespace: {{.Values.namespace }}
 spec:
   selector:
-    app: {{ .Release.Name }}-nginx-service
+    app: {{ .Release.Name }}-nginx
   ports:
       - protocol: {{ .Values.nginx.service.protocol }}
         port: {{ .Values.nginx.service.port }}
