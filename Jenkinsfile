@@ -3,7 +3,7 @@ pipeline {
         DOCKER_ID = "errlog"
         DOCKER_IMAGE_CAST_SERVICE = "jenkins-cast-service"
         DOCKER_IMAGE_MOVIE_SERVICE = "jenkins-movie-service"
-        DOCKER_TAG = "${env.BRANCH_NAME == "latest" ? "staging" :  "v.${BUILD_ID}.0"}"
+        DOCKER_TAG = "${env.BRANCH_NAME == "main" ? "latest" :  "v.${BUILD_ID}.0"}"
     }
 
     agent any
@@ -103,7 +103,7 @@ pipeline {
                             ls
                             cat $KUBECONFIG > .kube/config
                             cp manifests/values.yaml values.yml
-                            helm uninstall app -n dev
+                            helm status app -n dev && helm uninstall app -n dev || true
                             helm upgrade --install app manifests --values=values.yml --namespace dev --set cast_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_CAST_SERVICE:$DOCKER_TAG" --set movie_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_MOVIE_SERVICE:$DOCKER_TAG" --set nginx.service.port="8081"
                         '''
                     }
@@ -116,7 +116,7 @@ pipeline {
                             ls
                             cat $KUBECONFIG > .kube/config
                             cp manifests/values.yaml values.yml
-                            helm uninstall app -n qa
+                            helm status app -n qa && helm uninstall app -n qa || true
                             helm upgrade --install app manifests --values=values.yml --namespace qa --set cast_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_CAST_SERVICE:$DOCKER_TAG" --set movie_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_MOVIE_SERVICE:$DOCKER_TAG" --set nginx.service.port="8082"
                         '''
                     }
@@ -129,7 +129,7 @@ pipeline {
                             ls
                             cat $KUBECONFIG > .kube/config
                             cp manifests/values.yaml values.yml
-                            helm uninstall app -n staging
+                            helm status app -n staging && helm uninstall app -n staging || true
                             helm upgrade --install staging manifests --values=values.yml --namespace staging --set cast_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_CAST_SERVICE:$DOCKER_TAG" --set movie_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_MOVIE_SERVICE:$DOCKER_TAG" --set nginx.service.port="8083"
                         '''
                     }
@@ -149,7 +149,7 @@ pipeline {
                             ls
                             cat $KUBECONFIG > .kube/config
                             cp manifests/values.yaml values.yml
-                            helm uninstall app -n prod
+                            helm status app -n prod && helm uninstall app -n prod || true
                             helm upgrade --install app manifests --values=values.yml --namespace prod --set cast_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_CAST_SERVICE:latest" --set movie_service.deployment.repository="$DOCKER_ID/$DOCKER_IMAGE_MOVIE_SERVICE:latest" --set nginx.service.port="8084"
                         '''
                         }
