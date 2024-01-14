@@ -3,7 +3,7 @@ pipeline {
         DOCKER_ID = "errlog"
         DOCKER_IMAGE_CAST_SERVICE = "jenkins-cast-service"
         DOCKER_IMAGE_MOVIE_SERVICE = "jenkins-movie-service"
-        DOCKER_TAG = env.BRANCH_NAME == 'main' ? 'latest' : "v.${BUILD_ID}.0"
+        DOCKER_TAG = "${env.BRANCH_NAME == "latest" ? "staging" :  "v.${BUILD_ID}.0"}"
     }
 
     agent any
