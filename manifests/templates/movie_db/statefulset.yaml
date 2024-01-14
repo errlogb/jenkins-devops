@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: movie-db-postgres
-  namespace: {{.Values.namespace }}
 spec:
   replicas: 1
   selector:
